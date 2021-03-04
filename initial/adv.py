@@ -1,4 +1,5 @@
 from room import Room
+from player import Player
 
 # DECLARE ROOMS
 room_outside = Room(
@@ -42,15 +43,53 @@ room_narrow.branches.update({
 room_treasure.branches.update({
     "south": room_narrow,
 })
+command_table ={
+    'q':"q",
+    'quit':"q",
+}
+direction_table = {
+    'n':"north",
+    'north':"north",
+    'e':"east",
+    'east':"east",
+    'w':"west",
+    'west': "west",
+    's':"south",
+    'south':"south",
+}
+## fight monster / inventory / search / a(action) / pickup item / drop item / use item / timeout (/flip table/) then reset
 
-# main method
+def handle_command_input(command):
+    if command == "q":
+        print('Thank you for playing!')
+        quit() # This kills the flow of the program, how rude
+
+
+# main method-- This is what gets run by default, the first time through
 if __name__ == '__main__':
     # Make a new player object that is currently in the 'outside' room.
-
+    name = input('Please input your name: ') # this will give the value for the name
+    player = Player(name, room_outside)
     # Write a loop that:
-    #
+    input("Press any key to get started on your adventure!")
+
+
+    command_key = None # this is the key press to get it started
+    while command_key != "q":
+        print(player.current_location)
+        command_key = input("What would you like to do? \n Options: [n,s,e,w, (q)- Quit]").lower() ## We want it to always be a key we recognize
+
+        # This is your reference table for what the user is typing in.
+        if command_key in direction_table:
+            player.move_rooms(direction_table[command_key])
+        # This checks if it is a valid command or not
+        elif command_key in command_table:
+            handle_command_input(command_table[command_key]) # Good command, this is bracet
+        else:
+            print(f'Nah, "{command_key}" is not valid my boi! Try again:') # bad command, so warn away
     # * Prints the current room name
     # * Prints the current description (the textwrap module might be useful here).
+    # * Prints branches<YAY
     # * Waits for user input and decides what to do.
     #
     # If the user enters a cardinal direction, attempt to move to the room there.
@@ -58,4 +97,4 @@ if __name__ == '__main__':
     #
     # If the user enters "q", quit the game.
 
-    pass
+
