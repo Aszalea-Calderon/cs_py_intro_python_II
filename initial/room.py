@@ -2,7 +2,7 @@
 # description attributes.
 
 class Room:
-    def __init__(self, name, description, items = None):
+    def __init__(self, name, description, items = None, monster = None):
         self.name = name
         self.description = description
         self.branches = {
@@ -12,6 +12,7 @@ class Room:
             "west": None,
         }
         self.items = items if items is not None else {}
+        self.monster = monster
 
     def __repr__(self): # Most returns a representation of what you could call to make it
         return f"Room ({self.name},{self.description})\n "
@@ -24,11 +25,12 @@ Room: {self.name},
 * Description: {self.description}, 
 * Branches: {branch_rep},
 """
-    def is_valid_direction(self, direction):
+    def get_room_in_direction(self, direction):
         if self.branches[direction]:
-            return True
+            return self.branches[direction]
         else:
-            return False
+            print('You have hit a wall, now you have a headache! -1 HP')
+            return self
 
     def handle_dropped_item(self, item):
         if item not in self.items:
